@@ -1,0 +1,16 @@
+name: nf-cosine-r
+channels:
+  - conda-forge
+  - bioconda
+  - r
+dependencies:
+  - r-base=4.2
+  - r-optparse
+  - r-readr
+  - r-readxl
+  - r-dplyr
+  - r-lsa
+  - r-pheatmap
+  - r-ggplot2
+  - r-devtools
+  - python=3.10   # only if using python helpers
