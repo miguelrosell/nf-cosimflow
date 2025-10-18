@@ -4,20 +4,18 @@ process compute_cosine_process {
     tag { expr_file.baseName }
     publishDir "${params.outdir ?: './results'}", mode: 'copy'
 
+    // Use conda environment for reproducibility
+    conda "${projectDir}/envs/r_env.yml"
+
     input:
     path expr_file
 
     output:
-    path "cosine_matrix.tsv"                                         , emit: out_cosine_matrix
-    path "cosine_heatmap.png"                                        , emit: out_heatmap
-
-    // Use a conda environment or container (comment/uncomment as needed)
-    //conda 'envs/r_env.yml'
-    //container 'docker://rocker/tidyverse:latest'
+    path "cosine_matrix.csv", emit: out_cosine_matrix
+    path "cosine_heatmap.png", emit: out_heatmap
 
     script:
     """
-    # Convert xlsx to csv if needed and call R script
     Rscript ${projectDir}/bin/compute_cosine.R \\
         --input ${expr_file} \\
         --out_prefix cosine \\
@@ -27,4 +25,14 @@ process compute_cosine_process {
     """
 }
 
-workflow.onComplete { println "compute_cosine module finished" }
+workflow compute_cosine {
+    take:
+    expr_file_ch
+
+    main:
+    compute_cosine_process(expr_file_ch)
+
+    emit:
+    out_cosine_matrix = compute_cosine_process.out.out_cosine_matrix
+    out_heatmap       = compute_cosine_process.out.out_heatmap
+}
