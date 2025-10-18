@@ -2,6 +2,8 @@ nextflow.enable.dsl=2
 
 process compute_cosine_process {
     tag { expr_file.baseName }
+
+    // Save final results automatically in /results/
     publishDir "${params.outdir ?: './results'}", mode: 'copy'
 
     // Use conda environment for reproducibility
