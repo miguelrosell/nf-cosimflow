@@ -1,0 +1,15 @@
+# Nextflow core
+.nextflow/
+.nextflow.log*
+work/
+results/
+
+# R generated files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# System files
+.DS_Store
+Thumbs.db
