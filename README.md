@@ -33,38 +33,44 @@ nextflow run main.nf \
     --input data/test_expression.csv \
     -profile docker
 
-Parameters
-Parameter,Description,Default
---input,Path to the expression matrix (CSV/XLSX).,null
---method,"Similarity metric: cosine, pearson, or spearman.",cosine
---min_gene_mean,Filter out genes with mean count < value.,0.0
---outdir,Directory to save results.,results
+```
 
-📂 Output
+### Parameters
 
-All results are saved in the results/ directory:
+| Parameter | Description | Default |
+| --- | --- | --- |
+| `--input` | Path to the expression matrix (CSV/XLSX). | `null` |
+| `--method` | Similarity metric: `cosine`, `pearson`, or `spearman`. | `cosine` |
+| `--min_gene_mean` | Filter out genes with mean count < value. | `0.0` |
+| `--outdir` | Directory to save results. | `results` |
 
-    *_matrix.csv: The numeric similarity matrix.
+## 📂 Output
 
-    *_heatmap.png: A visual heatmap of the sample clustering.
+All results are saved in the `results/` directory:
 
-🧩 Integration
+* `*_matrix.csv`: The numeric similarity matrix.
+* `*_heatmap.png`: A visual heatmap of the sample clustering.
+
+## 🧩 Integration
 
 To use this in your own Nextflow pipeline:
 
-    Copy modules/local/compute_cosine.nf and subworkflows/local/run_cosimflow.nf to your project.
+1. Copy `modules/local/compute_cosine.nf` and `subworkflows/local/run_cosimflow.nf` to your project.
+2. Import it in your workflow:
 
-    Import it in your workflow:
-
+```groovy
 include { RUN_COSIMFLOW } from './subworkflows/local/run_cosimflow.nf'
 
 workflow {
     // Create input channel: [ meta, file ]
     ch_input = Channel.fromPath(params.input).map { file -> [ [id: file.baseName], file ] }
-
+    
     RUN_COSIMFLOW(ch_input)
 }
 
-👥 Credits
+```
 
-Developed by Miguel Rosell (@miguelrosell). Feel free to open an issue if you find any bugs or have suggestions!
+## 👥 Credits
+
+Developed by **Miguel Rosell** (@miguelrosell).
+Feel free to open an issue if you find any bugs or have suggestions!
